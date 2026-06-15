@@ -1,15 +1,33 @@
-- name: Install frontend
-  working-directory: ./client
-  run: npm install
+name: CI
+on: [push, pull_request]
 
-- name: Build frontend
-  working-directory: ./client
-  run: npm run build
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v4
 
-- name: Install backend
-  working-directory: ./server
-  run: npm install
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-- name: Test backend
-  working-directory: ./server
-  run: npm test
+      - name: Install frontend
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build --if-present
+
+      - name: Install backend
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Test backend
+        working-directory: ./backend
+        run: npm test
