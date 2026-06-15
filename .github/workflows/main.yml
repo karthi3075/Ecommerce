@@ -16,13 +16,13 @@ jobs:
           node-version: 20
 
       - name: Install frontend dependencies
-        working-directory: ./client
+        working-directory: ./frontend
         run: npm ci
 
       - name: Build frontend
-        working-directory: ./client
+        working-directory: ./frontend
         run: npm run build
 
       - name: Install backend dependencies
-        working-directory: ./server
+        working-directory: ./backend
         run: npm ci
