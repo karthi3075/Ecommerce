@@ -3,7 +3,8 @@ import Registration from './pages/Registration'
 import Login from "./pages/Login"
 import { BrowserRouter, Route,  Routes } from 'react-router-dom'
 import {ToastContainer} from "react-toastify"
-import "react-toastify/ReactToastify.css"
+// import "react-toastify/ReactToastify.css"
+import "react-toastify/dist/ReactToastify.css"
 import UserLayout from './layouts/UserLayout'
 import Products from "./pages/Products"
 import AdminLayout from './layouts/AdminLayout'
