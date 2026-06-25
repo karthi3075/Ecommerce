@@ -1,81 +1,61 @@
-import { useState } from "react";
+import React from 'react'
+import Registration from './pages/Registration'
+import Login from "./pages/Login"
+import { BrowserRouter, Route,  Routes } from 'react-router-dom'
+import {ToastContainer} from "react-toastify"
+import "react-toastify/ReactToastify.css"
+import UserLayout from './layouts/UserLayout'
+import Products from "./pages/Products"
+import AdminLayout from './layouts/AdminLayout'
+import Users from './pages/Users'
+import AdminRegistration from './pages/AdminRegistration'
+import Logout from './components/Logout'
+import ProductDetails from './pages/ProductDetails'
+import Cart from './pages/Cart'
+import AddProducts from './pages/AddProducts'
+import ViewProducts from './pages/ViewProducts'
+import OrderPage from './pages/OrderPage'
+import Orders from './pages/Orders'
+import OrderDetails from './pages/OrderDetails'
+import AdminOrders from './pages/AdminOrders'
 import axios from "axios"
-import ReactMarkdown from "react-markdown"
-import { useEffect, useRef } from "react";
-function App() {
+import Profile from './pages/Profile'
 
-    const [search, setSearch] = useState("");
-    const [chat, setChat] = useState([])
-    const scrollEnd = useRef(null)
-    const [loading, setLoading] = useState(false)
-    function handleChange(evnet) {
-        setSearch(event.target.value)
-    }
-
-    useEffect(() => {
-        scrollEnd.current?.scrollIntoView({
-            behavior: "smooth"
-        })
-    }, [chat])
-
-    const handleSubmit = async (event) => {
-        event.preventDefault()
-        setChat((prev) => { return [...prev, { user: search }] })
-        setLoading(true)
-        const response = await axios.post("https://chatbot-picf.onrender.com/chat", { message: search })
-        setLoading(false)
-        setChat((prev) => { return [...prev, { ai: response.data.response }] })
-        setSearch("")
-        const res = await axios.post("https://chatbot-picf.onrender.com/store", { question: search, answer: response.data.response })
-        if (res.data.status) {
-            console.log("ok")
-        } else {
-            console.log("not ok")
-        }
-    }
-
+const App = () => {
+    axios.defaults.withCredentials=true
     return (
-        <div className="flex justify-center items-center bg-black min-h-screen">
-            <div className="bg-white h-[500px] w-[700px] rounded relative">
-                <div className="bg-gray-800 text-white p-3">
-                    <h2 className="text-center text-xl font-bold">Chatbot</h2>
-                </div>
-                <div className="p-3 h-100  bg-gray-300 overflow-y-auto">
-                    
-                    {chat.map((data, index) => (
-                        data.user ?
-                            <div key={index} className="flex justify-end">
-                                <div className="p-3 shadow max-w-[80%] break-words bg-white rounded mb-2">
-                                    <h1>{data.user}</h1>
-                                </div>
-                            </div>
-                            :
-                            <div key={index} className="flex">
-                                <div className="p-3 shadow max-w-[80%] break-words bg-white rounded mb-2">
-                                    <ReactMarkdown>
-                                        {data.ai}
-                                    </ReactMarkdown>
-                                </div>
-                            </div>
-                    ))}
-                    {loading &&
-                        <div className="flex">
-                            <div className="p-3 shadow max-w-[80%] break-words bg-white rounded mb-2">
-                                <p>loading...</p>
-                            </div>
-                        </div>
-                    }
-                    <div ref={scrollEnd}></div>
-                </div>
-
-                <div className="absolute bottom-0 left-0 right-0 p-3 bg-gray-900 text-white">
-                    <form className="relative">
-                        <input type="text" value={search} onChange={handleChange} name="search" placeholder="Chat with Ai" className="px-2 py-1 outline-2 w-full rounded outline-blue-400" />
-                        <button onClick={handleSubmit} className="px-2 py-1 bg-green-600 rounded-right absolute right-0 top-0 bottom-0">send</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    )
+    <>
+    <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<Login/>}/>
+            <Route path="/registration" element={<Registration/>}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/logout" element={<Logout/>}/>
+            <Route path="/user" element={<UserLayout/>}>
+                <Route path="dashboard" element={<Products/>} />
+                <Route path='product_details/:id' element={<ProductDetails/>}/>
+                <Route path='cart' element={<Cart/>}/>
+                <Route path="order_page" element={<OrderPage/>}/>
+                <Route path="orders" element={<Orders/>}/>
+                <Route path="order_details/:id" element={<OrderDetails/>}/>
+                <Route path="profile" element={<Profile/>}/>
+            </Route>
+            <Route path="admin_registration" element={<AdminRegistration/>}/>
+            <Route path="/admin" element={<AdminLayout/>}>
+                <Route index element={<Users/>}/>
+                <Route path='users' element={<Users/>}/>
+                <Route path='add_products' element={<AddProducts/>}/>
+                <Route path='add_products/:id' element={<AddProducts/>}/>
+                <Route path='view_products' element={<ViewProducts/>}/>
+                <Route path="orders" element={<AdminOrders/>}/>
+                <Route path="order_details/:id" element={<OrderDetails/>}/>
+                <Route path="profile" element={<Profile/>}/>
+            </Route>
+        </Routes>
+    </BrowserRouter>
+    <ToastContainer position='top-center' autoClose={3000} pauseOnHover closeOnClick/>
+    </>
+  )
 }
-export default App;
+
+export default App
