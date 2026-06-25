@@ -21,8 +21,8 @@ import AdminOrders from './pages/AdminOrders'
 import axios from "axios"
 import Profile from './pages/Profile'
 
+axios.defaults.withCredentials=true
 const App = () => {
-    axios.defaults.withCredentials=true
     return (
     <>
     <BrowserRouter>
@@ -40,7 +40,7 @@ const App = () => {
                 <Route path="order_details/:id" element={<OrderDetails/>}/>
                 <Route path="profile" element={<Profile/>}/>
             </Route>
-            <Route path="admin_registration" element={<AdminRegistration/>}/>
+            <Route path="/admin_registration" element={<AdminRegistration/>}/>
             <Route path="/admin" element={<AdminLayout/>}>
                 <Route index element={<Users/>}/>
                 <Route path='users' element={<Users/>}/>
