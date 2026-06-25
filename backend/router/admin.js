@@ -18,7 +18,7 @@ router.post("/registration", async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: false,
-            sameSite: "Strict",
+            sameSite: "None",
             maxAge: 24*60*60*1000
         })
         res.status(201).json({
